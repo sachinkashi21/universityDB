@@ -19,12 +19,11 @@ const initDB = async () => {
 
         await connection.end(); // Close temporary connection
 
-        // Now connect to the newly created database
         const pool = mysql.createPool({
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME, // Now the DB exists!
+            database: process.env.DB_NAME,
         });
 
 
@@ -32,7 +31,7 @@ const initDB = async () => {
             // Drop existing tables
             "DROP TABLE IF EXISTS ATTENDANCE, REPORT, ASSIGNMENT, CURRICULUM, LECTURE, COURSE, CLASS, STUDENT, TEACHER, USERS",
 
-            // USER
+            // USERS
             `CREATE TABLE USERS (
                 UserId INT PRIMARY KEY AUTO_INCREMENT,
                 Name VARCHAR(100) NOT NULL,
@@ -146,12 +145,14 @@ const initDB = async () => {
             await pool.query(query);
         }
 
-        console.log("Database initialized successfully! 🎉");
+        console.log("Database initialized successfully!");
+
+        await pool.end();
+        console.log("Connection pool closed.");
+        
     } catch (error) {
         console.error("Error initializing database:", error);
-    } finally {
-        pool.end();
     }
 };
 
-initDB();
+initDB().then(() => process.exit(0));
