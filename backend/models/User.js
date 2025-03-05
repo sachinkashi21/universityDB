@@ -1,35 +1,71 @@
 const pool = require("../config/db");
+let bcrypt=require('bcrypt');
+const saltRounds = 10;
 
 const User = {
-  create: async ({ name, role, phone, address, email }) => {
+  createUser: async ({ fname, minit, lname, role, phone, state, city, pin, email, password, dob }) => {
+    const query1 = `SELECT * FROM USERS WHERE Email = ?`;
+    const [rows] = await pool.query(query1, [email]);
+    // console.log(rows);
+    if (rows.length !== 0) {
+      return { error: "User already exists" };
+    }
+    const hash = bcrypt.hashSync(password, saltRounds);
     const query = `
-      INSERT INTO USERS (Name, Role, Phone, Address, Email)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO USERS (FName, MInit, LName, Role, Phone, State, City, PinCode, Email, Password, dob)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    const [result] = await pool.query(query, [name, role, phone, address, email]);
-return result.insertId;
+    const [result] = await pool.query(query, [fname, minit, lname, role, phone, state, city, pin, email, hash, dob]);
+    return { userId: result.insertId };
+  },
+  login: async ({ email, password }) => {
+    const query = `SELECT * FROM USERS WHERE Email = ?`;
+    const [rows] = await pool.query(query, [email]);
+    if (rows.length === 0) {
+      return { error: "User does not exist" };
+    }
+    const user = rows[0];
+    if (bcrypt.compareSync(password, user.Password)) {
+      return { userId: user.UserId, role: user.Role };
+    }
+    return { error: "Bad Credentials" };
+  },
+  changePassword: async (userId, { oldPassword, newPassword }) => {
+    const query = `SELECT * FROM USERS WHERE UserId = ?`;
+    const [rows] = await pool.query(query, [userId]);
+    if (rows.length === 0) {
+      return { error: "User does not exist" };
+    }
+    const user = rows[0];
+    if (bcrypt.compareSync(oldPassword, user.Password)) {
+      const hash = bcrypt.hashSync(newPassword, saltRounds);
+      const query = `UPDATE USERS SET Password = ? WHERE UserId = ?`;
+      await pool.query(query, [hash, userId]);
+      return { success: true };
+    }
+    return { error: "Bad Credentials" };
   },
 
   getById: async (userId) => {
     const query = `SELECT * FROM USERS WHERE UserId = ?`;
     const [rows] = await pool.query(query, [userId]);
-return rows[0];
+    return rows[0];
   },
 
   getAll: async () => {
     const query = `SELECT * FROM USERS`;
     const [rows] = await pool.query(query);
-return rows;
+    return rows;
   },
 
-  update: async (userId, { name, phone, address, email }) => {
+  update: async (userId, { fname, minit, lname, phone, state, city, pincode}) => {
     const query = `
       UPDATE USERS 
       SET Name = ?, Phone = ?, Address = ?, Email = ?
       WHERE UserId = ?
     `;
     const [result] = await pool.query(query, [name, phone, address, email, userId]);
-return result.affectedRows > 0;
+    return result.affectedRows > 0;
   },
 
   delete: async (userId) => {

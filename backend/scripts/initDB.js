@@ -43,7 +43,8 @@ const initDB = async () => {
                 Phone VARCHAR(10),
                 State VARCHAR(20),
                 City VARCHAR(20),
-                PinCode VARCHAR(6)
+                PinCode VARCHAR(6),
+                DOB DATE NOT NULL
             )`,
         
             // CLASS Table (Independent)
@@ -76,7 +77,6 @@ const initDB = async () => {
             // STUDENT Table (Depends on USERS and CLASS)
             `CREATE TABLE STUDENT (
                 UserId INT PRIMARY KEY,
-                DOB DATE,
                 CurrentClassId INT,
                 FOREIGN KEY (UserId) REFERENCES USERS(UserId) ON DELETE CASCADE,
                 FOREIGN KEY (CurrentClassId) REFERENCES CLASS(ClassId) ON DELETE SET NULL
