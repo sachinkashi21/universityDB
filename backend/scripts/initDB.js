@@ -28,20 +28,25 @@ const initDB = async () => {
 
 
         const queries = [
-            // Drop existing tables
+            // Drop existing tables in correct order
             "DROP TABLE IF EXISTS ATTENDANCE, REPORT, ASSIGNMENT, CURRICULUM, LECTURE, COURSE, CLASS, STUDENT, TEACHER, USERS",
-
-            // USERS
+        
+            // USERS Table (Independent)
             `CREATE TABLE USERS (
                 UserId INT PRIMARY KEY AUTO_INCREMENT,
-                Name VARCHAR(100) NOT NULL,
-                Role ENUM('Student', 'Teacher') NOT NULL,
-                Phone VARCHAR(15),
-                Address VARCHAR(255),
-                Email VARCHAR(100) UNIQUE NOT NULL
+                Email VARCHAR(100) UNIQUE NOT NULL,
+                Password VARCHAR(255) NOT NULL,
+                FName VARCHAR(10) NOT NULL,
+                MInit VARCHAR(10),
+                LName VARCHAR(10),
+                Role ENUM('Student', 'Teacher', 'Admin') NOT NULL,
+                Phone VARCHAR(10),
+                State VARCHAR(20),
+                City VARCHAR(20),
+                PinCode VARCHAR(6)
             )`,
-
-            // CLASS
+        
+            // CLASS Table (Independent)
             `CREATE TABLE CLASS (
                 ClassId INT PRIMARY KEY AUTO_INCREMENT,
                 Sem INT NOT NULL,
@@ -50,16 +55,34 @@ const initDB = async () => {
                 EndDate DATE NOT NULL,
                 Degree VARCHAR(50) NOT NULL
             )`,
-
-            // COURSE
+        
+            // COURSE Table (Independent)
             `CREATE TABLE COURSE (
                 CourseCode VARCHAR(20) PRIMARY KEY,
                 Name VARCHAR(100) NOT NULL,
                 Credits INT NOT NULL,
                 DeptName VARCHAR(50) NOT NULL
             )`,
-
-            // LECTURE
+        
+            // TEACHER Table (Depends on USERS)
+            `CREATE TABLE TEACHER (
+                UserId INT PRIMARY KEY,
+                Salary DECIMAL(10,2),
+                SSN VARCHAR(20) UNIQUE,
+                Department VARCHAR(50),
+                FOREIGN KEY (UserId) REFERENCES USERS(UserId) ON DELETE CASCADE
+            )`,
+        
+            // STUDENT Table (Depends on USERS and CLASS)
+            `CREATE TABLE STUDENT (
+                UserId INT PRIMARY KEY,
+                DOB DATE,
+                CurrentClassId INT,
+                FOREIGN KEY (UserId) REFERENCES USERS(UserId) ON DELETE CASCADE,
+                FOREIGN KEY (CurrentClassId) REFERENCES CLASS(ClassId) ON DELETE SET NULL
+            )`,
+        
+            // LECTURE Table (Depends on COURSE and CLASS)
             `CREATE TABLE LECTURE (
                 LectureId INT PRIMARY KEY AUTO_INCREMENT,
                 Date DATE NOT NULL,
@@ -67,23 +90,24 @@ const initDB = async () => {
                 Duration INT NOT NULL,
                 Topic VARCHAR(255) NOT NULL,
                 RoomNo VARCHAR(20),
+                MeetLink VARCHAR(100),
                 CourseId VARCHAR(20),
                 ClassId INT,
                 FOREIGN KEY (CourseId) REFERENCES COURSE(CourseCode) ON DELETE CASCADE,
                 FOREIGN KEY (ClassId) REFERENCES CLASS(ClassId) ON DELETE CASCADE
             )`,
-
-            // ATTENDANCE
+        
+            // ATTENDANCE Table (Depends on USERS and LECTURE)
             `CREATE TABLE ATTENDANCE (
-                AttendanceId INT PRIMARY KEY AUTO_INCREMENT,
-                Status ENUM('Present', 'Absent') NOT NULL,
+                Status ENUM('Present', 'Absent', 'Partial') NOT NULL,
                 StudentId INT,
                 LectureId INT,
+                PRIMARY KEY (StudentId, LectureId),
                 FOREIGN KEY (StudentId) REFERENCES USERS(UserId) ON DELETE CASCADE,
                 FOREIGN KEY (LectureId) REFERENCES LECTURE(LectureId) ON DELETE CASCADE
             )`,
-
-            // REPORT
+        
+            // REPORT Table (Depends on COURSE, CLASS, and USERS)
             `CREATE TABLE REPORT (
                 ReportId INT PRIMARY KEY AUTO_INCREMENT,
                 SEEMarks INT,
@@ -97,8 +121,8 @@ const initDB = async () => {
                 FOREIGN KEY (ClassId) REFERENCES CLASS(ClassId) ON DELETE CASCADE,
                 FOREIGN KEY (StudentId) REFERENCES USERS(UserId) ON DELETE CASCADE
             )`,
-
-            // ASSIGNMENT
+        
+            // ASSIGNMENT Table (Depends on CLASS and COURSE)
             `CREATE TABLE ASSIGNMENT (
                 AssignmentId INT PRIMARY KEY AUTO_INCREMENT,
                 Title VARCHAR(255) NOT NULL,
@@ -110,36 +134,19 @@ const initDB = async () => {
                 FOREIGN KEY (ClassId) REFERENCES CLASS(ClassId) ON DELETE CASCADE,
                 FOREIGN KEY (CourseId) REFERENCES COURSE(CourseCode) ON DELETE CASCADE
             )`,
-
-            // CURRICULUM
+        
+            // CURRICULUM Table (Depends on CLASS, COURSE, and USERS)
             `CREATE TABLE CURRICULUM (
-                CurriculumId INT PRIMARY KEY AUTO_INCREMENT,
                 ClassId INT,
                 CourseId VARCHAR(20),
                 AssignedTeacherId INT,
+                PRIMARY KEY (ClassId, CourseId),
                 FOREIGN KEY (ClassId) REFERENCES CLASS(ClassId) ON DELETE CASCADE,
                 FOREIGN KEY (CourseId) REFERENCES COURSE(CourseCode) ON DELETE CASCADE,
                 FOREIGN KEY (AssignedTeacherId) REFERENCES USERS(UserId) ON DELETE CASCADE
-            )`,
-
-            // TEACHER
-            `CREATE TABLE TEACHER (
-                UserId INT PRIMARY KEY,
-                Salary DECIMAL(10,2),
-                SSN VARCHAR(20) UNIQUE,
-                Department VARCHAR(50),
-                FOREIGN KEY (UserId) REFERENCES USERS(UserId) ON DELETE CASCADE
-            )`,
-
-            // STUDENT
-            `CREATE TABLE STUDENT (
-                UserId INT PRIMARY KEY,
-                DOB DATE NOT NULL,
-                CurrentClassId INT,
-                FOREIGN KEY (UserId) REFERENCES USERS(UserId) ON DELETE CASCADE,
-                FOREIGN KEY (CurrentClassId) REFERENCES CLASS(ClassId) ON DELETE CASCADE
             )`
         ];
+        
 
         for (let query of queries) {
             await pool.query(query);
