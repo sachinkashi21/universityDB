@@ -4,13 +4,16 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const Register = () => {
   const [data, setData] = useState({
-    fname: "", minit: "", lname: "", role: "Teacher", phone: "", state: "", city: "", pin: "", dob: "", email: ""
+    fname: "", minit: "", lname: "", role: "Teacher", phone: "", dob: "", email: ""
   });
 
   let handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(data);
-    let res= await axios.post('http://localhost:8080/user/register', {...data,password:data.dob});
+    let res= await axios.post('http://localhost:8080/user/register', {
+      data:{...data,password:data.dob},
+      headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}
+    });
     console.log(res.data);
     if(res.data.error){
       toast.error(res.data.error);  
@@ -18,7 +21,7 @@ const Register = () => {
     else{
       toast.success("User registered successfully");
       setData({
-        fname: "", minit: "", lname: "", role: "Teacher", phone: "", state: "", city: "", pin: "", dob: "", email: ""
+        fname: "", minit: "", lname: "", role: "Teacher", phone: "", email: "",dob:""
       });
     }
   };
@@ -54,27 +57,17 @@ const Register = () => {
           </div>
 
           <div className="mb-4">
+            <label htmlFor="email" className="block text-indigo-900 font-semibold">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter email" className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" onChange={handleChange} value={data.email} />
+          </div>
+          <div className="mb-4">
             <label className="block text-indigo-900 font-semibold" htmlFor='phone'>Phone</label>
             <input name="phone" placeholder="Enter phone number" className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" onChange={handleChange} value={data.phone} />
           </div>
 
           <div className="mb-4">
-            <label className="block text-indigo-900 font-semibold">Address</label>
-            <div className="flex gap-2 mt-1">
-              <input name="state" placeholder="State" className="border border-gray-300 p-2 w-1/3 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" onChange={handleChange} value={data.state} />
-              <input name="city" placeholder="City" className="border border-gray-300 p-2 w-1/3 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" onChange={handleChange} value={data.city} />
-              <input name="pin" placeholder="PIN Code" className="border border-gray-300 p-2 w-1/3 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" onChange={handleChange} value={data.pin} />
-            </div>
-          </div>
-
-          <div className="mb-4">
             <label className="block text-indigo-900 font-semibold">Date of Birth</label>
             <input type="date" name="dob" className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" onChange={handleChange} value={data.dob} />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-indigo-900 font-semibold">Email</label>
-            <input type="email" id="email" name="email" placeholder="Enter email" className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" onChange={handleChange} value={data.email} />
           </div>
 
           <button type="submit" className="block bg-orange-600 hover:bg-orange-700 text-white p-3 w-full rounded-lg text-xl font-semibold transition-all duration-300">Register</button>

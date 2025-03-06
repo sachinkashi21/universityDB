@@ -2,23 +2,24 @@ import React, {useState} from 'react'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 
-const Login = () => {
+const Login = ({setIsLoggedIn}) => {
   const [data, setData] = useState({
     email: "", password: ""
   });
 
   let handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(data);
-    let res = await axios.post('http://localhost:8080/user/login', data);
-    console.log(res.data);
+    let res = await axios.post('http://localhost:8080/user/login', {data});
+    // console.log(res.data);
     if (res.data.error) {
       toast.error(res.data.error);
     } else {
-      toast.success("User logged in successfully");
-      setData({
-        email: "", password: ""
-      });
+      toast.success("User logged in successfully "+res.data.user.email);
+      console.log(res);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user))
+      setData({email: "", password: ""});
+      setIsLoggedIn(true);
     }
   };
 

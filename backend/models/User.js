@@ -3,7 +3,7 @@ let bcrypt=require('bcrypt');
 const saltRounds = 10;
 
 const User = {
-  createUser: async ({ fname, minit, lname, role, phone, state, city, pin, email, password, dob }) => {
+  createUser: async ({ fname, minit, lname, role, phone, email, password, dob }) => {
     const query1 = `SELECT * FROM USERS WHERE Email = ?`;
     const [rows] = await pool.query(query1, [email]);
     // console.log(rows);
@@ -12,12 +12,13 @@ const User = {
     }
     const hash = bcrypt.hashSync(password, saltRounds);
     const query = `
-      INSERT INTO USERS (FName, MInit, LName, Role, Phone, State, City, PinCode, Email, Password, dob)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO USERS (FName, MInit, LName, Role, Phone, Email, Password, dob)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    const [result] = await pool.query(query, [fname, minit, lname, role, phone, state, city, pin, email, hash, dob]);
+    const [result] = await pool.query(query, [fname, minit, lname, role, phone, email, hash, dob]);
     return { userId: result.insertId };
   },
+
   login: async ({ email, password }) => {
     const query = `SELECT * FROM USERS WHERE Email = ?`;
     const [rows] = await pool.query(query, [email]);
@@ -26,10 +27,11 @@ const User = {
     }
     const user = rows[0];
     if (bcrypt.compareSync(password, user.Password)) {
-      return { userId: user.UserId, role: user.Role };
+      return { email, role: user.Role };
     }
     return { error: "Bad Credentials" };
   },
+
   changePassword: async (userId, { oldPassword, newPassword }) => {
     const query = `SELECT * FROM USERS WHERE UserId = ?`;
     const [rows] = await pool.query(query, [userId]);

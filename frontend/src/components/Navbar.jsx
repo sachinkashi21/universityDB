@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 
-const Navbar = () => {
+const Navbar = ({isLoggedIn,setIsLoggedIn}) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate=useNavigate();
+
+  let handleLogout=()=>{
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+  }
 
   return (
     <nav className="bg-indigo-900 text-white fixed w-full z-20 top-0 start-0 border-b border-indigo-700">
@@ -47,8 +55,9 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* CTA Button */}
-        <button className="hidden md:block bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-lg font-semibold transition">Login</button>
+        {(isLoggedIn) ?<button onClick={handleLogout} className="hidden md:block bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-lg font-semibold transition">Logout</button>
+        :<button className="hidden md:block bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-lg font-semibold transition" onClick={()=>{navigate("/login")}} >Login</button>
+        }
       </div>
     </nav>
   );
