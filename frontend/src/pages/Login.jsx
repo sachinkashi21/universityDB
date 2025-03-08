@@ -31,7 +31,7 @@ const Login = ({setIsLoggedIn}) => {
   };
 
   return (
-    <div className="mt-20 flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-indigo-300 p-4">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-indigo-300 p-4">
       <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
         <h2 className="text-4xl font-extrabold text-indigo-800 text-center mb-6">Login</h2>
         <form onSubmit={handleSubmit}>

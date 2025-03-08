@@ -14,3 +14,6 @@ module.exports.isAdmin=(req,res,next)=>{
         res.json({error:"Unauthorized, login as admin"});
     }
 }
+module.exports.isTeacher=()=>{
+    
+}

@@ -10,14 +10,16 @@ app.use(cors(corsOptions));
 
 
 let userRouter=require("./routes/userRouter");
+let classRouter=require("./routes/classRouter");
 
 app.get("/",(req,res)=>{
     res.send("Get: home route");
 })
 app.use("/user",userRouter);
-
+app.use("/class",classRouter);
+ 
 app.use((err,req,res,next)=>{
-    // console.error(err.message);
+    console.error(err.message);
     res.send({status: 500, error:(err.message)?err.message:"Something broke"});
 });
 app.listen(process.env.PORT,()=>{

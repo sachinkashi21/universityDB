@@ -6,7 +6,6 @@ const User = {
   createUser: async ({ fname, minit, lname, role, phone, email, password, dob }) => {
     const query1 = `SELECT * FROM USERS WHERE Email = ?`;
     const [rows] = await pool.query(query1, [email]);
-    // console.log(rows);
     if (rows.length !== 0) {
       return { error: "User already exists" };
     }
@@ -59,22 +58,6 @@ const User = {
     const [rows] = await pool.query(query);
     return rows;
   },
-
-  update: async (userId, { fname, minit, lname, phone, state, city, pincode}) => {
-    const query = `
-      UPDATE USERS 
-      SET Name = ?, Phone = ?, Address = ?, Email = ?
-      WHERE UserId = ?
-    `;
-    const [result] = await pool.query(query, [name, phone, address, email, userId]);
-    return result.affectedRows > 0;
-  },
-
-  delete: async (userId) => {
-    const query = `DELETE FROM USERS WHERE UserId = ?`;
-    const [result] = await pool.query(query, [userId]);
-return result.affectedRows > 0;
-  }
 };
 
 module.exports = User;

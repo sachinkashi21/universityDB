@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const router = require("express").Router();
 const asyncFn = require("../middleware/asyncWrapper");
-const {isAdmin} = require("../middleware/authorization");
+const {isAdmin, isTeacher} = require("../middleware/authorization");
 const jwt = require("jsonwebtoken");
 
 router.post("/register",isAdmin, asyncFn(async (req, res) => {
