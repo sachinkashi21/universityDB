@@ -11,12 +11,16 @@ app.use(cors(corsOptions));
 
 let userRouter=require("./routes/userRouter");
 let classRouter=require("./routes/classRouter");
+let courseRouter=require("./routes/courseRouter");
+let teacherRouter=require("./routes/teacherRouter");
 
 app.get("/",(req,res)=>{
     res.send("Get: home route");
 })
 app.use("/user",userRouter);
 app.use("/class",classRouter);
+app.use("/course",courseRouter);
+app.use("/teacher",teacherRouter);
  
 app.use((err,req,res,next)=>{
     console.error(err.message);

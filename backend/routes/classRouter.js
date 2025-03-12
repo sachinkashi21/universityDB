@@ -12,4 +12,15 @@ router.get("/:id", asyncFn(async (req, res) => {
     res.json(clsInfo);
 }));
 
+router.post("/:id/addcourse", asyncFn(async (req, res) => {
+    const courses = await Class.addCourse(req.params.id, req.body.data.courseCode, req.body.data.teacherId);
+    res.json({message: "Courses added successfully"});
+}));
+
+router.post("/new",asyncFn(async (req,res)=>{
+    const newClassId=await Class.create(req.body.data);
+    // console.log(newClass);
+    res.json({classId: newClassId});
+}));
+
 module.exports = router;
