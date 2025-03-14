@@ -11,6 +11,10 @@ import ClassNew from "./pages/Class/New";
 import ClassShow from "./pages/Class/Show";
 import ClassLayout from './layouts/ClassLayout';
 import AddCourse from './pages/Class/AddCourse';
+import AddStudents from './pages/Class/AddStudents';
+
+import CourseIndex from "./pages/Course/Index";
+import CourseNew from "./pages/Course/New";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token") ? true : false);
@@ -26,6 +30,11 @@ function App() {
           <Route path='new' element={<ClassNew/>}></Route>
           <Route path=':id' element={<ClassShow/>}></Route>
           <Route path=':id/addcourse' element={<AddCourse/>}></Route>
+          <Route path=':id/addStudents' element={<AddStudents/>}></Route>
+        </Route>
+        <Route path="/course" element={<ClassLayout/>}>
+          <Route index element={<CourseIndex/>}></Route>
+          <Route path='new' element={<CourseNew/>}></Route>
         </Route>
       </Routes>
     </>

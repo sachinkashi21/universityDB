@@ -54,16 +54,17 @@ const Show = () => {
                         </div>
                     </div>
                     <div className="bg-white p-6 rounded-2xl shadow-lg mb-2">
-                        <h1 className="text-    xl text-indigo-900">Students:</h1>
-                        {cls.Students.map((student) => (
-                            <div key={student.UserId}>
-                                <h2 className="text-2xl font-bold text-indigo-900">{student.Name}</h2>
-                                <p className="text-gray-700 mt-2"><span className="font-medium">{student.FName} {student.MInit} {student.LName}</span></p>
-                            </div>
-                        ))}
+                        <h1 className="text-xl text-indigo-900">Students:</h1>
+                        <ol>
+                            {cls.Students.map((student) => (
+                                <li key={student.UserId}>
+                                    <p className="text-gray-700 mt-2"><span className="font-medium">{student.FName} {student.MInit} {student.LName}</span></p>
+                                </li>
+                            ))}
+                        </ol>
                         <div className="pt-5">
                             <div className="flex justify-end">
-                            <button type="submit" className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                            <button onClick={(e)=>{navigate(`/class/${id}/addStudents`)}} type="submit" className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                                 Add
                             </button>
                             </div>

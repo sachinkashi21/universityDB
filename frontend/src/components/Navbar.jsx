@@ -46,10 +46,10 @@ const Navbar = ({isLoggedIn,setIsLoggedIn}) => {
           } md:flex md:items-center md:w-auto w-full mt-4 md:mt-0 md:space-x-8 bg-indigo-800 md:bg-transparent rounded-lg p-4 md:p-0`}
           >
           <ul className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-6 text-lg font-medium">
-            <li><a href="#" className="hover:text-orange-400 transition">Home</a></li>
-            <li><a href="#" className="hover:text-orange-400 transition">About</a></li>
-            <li><a href="#" className="hover:text-orange-400 transition">Services</a></li>
-            <li><a href="#" className="hover:text-orange-400 transition">Contact</a></li>
+            <li><span onClick={()=>navigate('/')} className="hover:text-orange-400 transition">Home</span></li>
+            <li><span onClick={()=>navigate('/class')} className="hover:text-orange-400 transition">All-Classes</span></li>
+            <li><span onClick={()=>navigate('/course')} className="hover:text-orange-400 transition">All-Courses</span></li>
+            <li><span onClick={()=>navigate('/')} className="hover:text-orange-400 transition">Contact</span></li>
           </ul>
         </div>
 

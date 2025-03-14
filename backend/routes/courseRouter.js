@@ -14,4 +14,9 @@ router.get('/',asyncFn(async (req,res)=>{
     res.json(courses);
 }));
 
+router.post('/new',asyncFn(async(req,res)=>{
+    await Course.create(req.body.data);
+    res.json({message:`Course Created Successfully`});
+}))
+
 module.exports=router;

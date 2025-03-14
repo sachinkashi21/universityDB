@@ -29,6 +29,13 @@ const Class = {
         const query = `INSERT INTO CURRICULUM (ClassId, CourseId, AssignedTeacherId) VALUES (?, ?, ?)`;
         const [result] = await pool.query(query, [classId,courseCode,teacherId]);
         return result;
+    },
+    addStudents: async (classId, students) =>{
+        const q=`UPDATE Student SET CurrentClassId=? WHERE UserId=?`;
+        for(s of students){
+            await pool.query(q,[classId,s])
+        }
+        return;
     }
 };
 

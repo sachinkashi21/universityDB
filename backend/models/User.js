@@ -15,6 +15,13 @@ const User = {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const [result] = await pool.query(query, [fname, minit, lname, role, phone, email, hash, dob]);
+    if(role=="Student"){
+      const q1=`INSERT INTO STUDENT (UserId) VALUES (?)`
+      await pool.query(q1,[result.insertId]);
+    } else if(role="Teacher"){
+      const q2=`INSERT INTO TEACHER (UserId) VALUES (?)`
+      await pool.query(q2,[result.insertId]);
+    }
     return { userId: result.insertId };
   },
 
