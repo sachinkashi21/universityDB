@@ -54,7 +54,7 @@ const Navbar = ({isLoggedIn,setIsLoggedIn}) => {
         </div>
 
         {(isLoggedIn) ?<button onClick={handleLogout} className="hidden md:block bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-lg font-semibold transition">Logout</button>
-        :<button className="hidden md:block bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-lg font-semibold transition" onClick={()=>{navigate("/login")}} >Login</button>
+        :<button className="hidden md:block bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-lg font-semibold transition" onClick={()=>{navigate("/user/login")}} >Login</button>
       }
       </div>
     </nav>

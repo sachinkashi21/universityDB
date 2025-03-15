@@ -10,18 +10,18 @@ const Register = () => {
   let handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(data);
-    let res= await axios.post('http://localhost:8080/user/register', {
-      data:{...data,password:data.dob},
-      headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}
+    let res = await axios.post('http://localhost:8080/user/register', {
+      data: { ...data, password: data.dob },
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     });
     console.log(res.data);
-    if(res.data.error){
-      toast.error(res.data.error);  
+    if (res.data.error) {
+      toast.error(res.data.error);
     }
-    else{
+    else {
       toast.success("User registered successfully");
       setData({
-        fname: "", minit: "", lname: "", role: "Teacher", phone: "", email: "",dob:""
+        fname: "", minit: "", lname: "", role: "Teacher", phone: "", email: "", dob: ""
       });
     }
   };
@@ -35,6 +35,7 @@ const Register = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-indigo-300 p-4">
+      <ToastContainer />
       <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
         <h2 className="text-4xl font-extrabold text-indigo-800 text-center mb-6">Register</h2>
         <form onSubmit={handleSubmit}>
@@ -73,7 +74,6 @@ const Register = () => {
           <button type="submit" className="block bg-orange-600 hover:bg-orange-700 text-white p-3 w-full rounded-lg text-xl font-semibold transition-all duration-300">Register</button>
         </form>
       </div>
-      <ToastContainer />
     </div>
   );
 };
