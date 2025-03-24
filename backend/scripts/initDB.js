@@ -109,7 +109,6 @@ const initDB = async () => {
         
             // REPORT Table (Depends on COURSE, CLASS, and USERS)
             `CREATE TABLE REPORT (
-                ReportId INT PRIMARY KEY AUTO_INCREMENT,
                 SEEMarks INT,
                 CIEMarks INT,
                 Grade CHAR(2),
@@ -117,6 +116,7 @@ const initDB = async () => {
                 CourseId VARCHAR(20),
                 ClassId INT,
                 StudentId INT,
+                Primary key (CourseId, ClassId, StudentId),
                 FOREIGN KEY (CourseId) REFERENCES COURSE(CourseCode) ON DELETE CASCADE,
                 FOREIGN KEY (ClassId) REFERENCES CLASS(ClassId) ON DELETE CASCADE,
                 FOREIGN KEY (StudentId) REFERENCES USERS(UserId) ON DELETE CASCADE

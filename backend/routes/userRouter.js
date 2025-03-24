@@ -18,7 +18,7 @@ router.post("/login", asyncFn(async (req, res) => {
   if (result.error) {
     return res.json({error:result.error});
   }
-  const token=jwt.sign({email:result.email,role:result.role},process.env.JWT_SECRET,{expiresIn:"1h"});
+  const token=jwt.sign({userId:result.userId,email:result.email,role:result.role},process.env.JWT_SECRET,{expiresIn:"1h"});
   res.json({token,user:result});
 }));
 

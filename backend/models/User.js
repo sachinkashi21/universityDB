@@ -33,7 +33,7 @@ const User = {
     }
     const user = rows[0];
     if (bcrypt.compareSync(password, user.Password)) {
-      return { email, role: user.Role };
+      return { userId: user.UserId ,email, role: user.Role };
     }
     return { error: "Bad Credentials" };
   },

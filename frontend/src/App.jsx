@@ -19,6 +19,13 @@ import AddStudents from './pages/Class/AddStudents';
 import CourseIndex from "./pages/Course/Index";
 import CourseNew from "./pages/Course/New";
 
+import TeacherClass from './pages/Teacher/TeacherClass';
+import TeacherDashboard from './pages/Teacher/Dashboard';
+
+import NewLecture from './pages/Lecture/New'
+import LectureAttendance from './pages/Lecture/Attedance'
+import AddMarks from './pages/Report/AddMarks';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token") ? true : false);
   return (
@@ -43,6 +50,20 @@ function App() {
         <Route path="/course" element={<Layout />}>
           <Route index element={<CourseIndex />}></Route>
           <Route path='new' element={<CourseNew />}></Route>
+        </Route>
+
+        <Route path="/teacher" element={<Layout />}>
+          <Route path='dashboard' element={<TeacherDashboard/>}></Route>
+          <Route path=':classId/:courseId' element={<TeacherClass />}></Route>
+        </Route>
+        
+        <Route path="/lecture" element={<Layout />}>
+          <Route path=':lectId/:classId' element={<LectureAttendance />}></Route>
+          <Route path='new/:classId/:courseId' element={<NewLecture />}></Route>
+        </Route>
+
+        <Route path='/report' element={<Layout/>}>
+          <Route path=':classId/:courseId' element={<AddMarks/>}></Route>
         </Route>
 
       </Routes>

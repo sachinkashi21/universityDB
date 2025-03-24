@@ -14,6 +14,8 @@ let classRouter=require("./routes/classRouter");
 let courseRouter=require("./routes/courseRouter");
 let teacherRouter=require("./routes/teacherRouter");
 let studentRouter=require("./routes/studentRouter");
+let lectureRouter=require("./routes/lectureRouter");
+let reportRouter=require("./routes/reportRouter");
 
 app.get("/",(req,res)=>{
     res.send("Get: home route");
@@ -23,6 +25,8 @@ app.use("/class",classRouter);
 app.use("/course",courseRouter);
 app.use("/teacher",teacherRouter);
 app.use("/student",studentRouter);
+app.use("/lecture",lectureRouter);
+app.use("/report",reportRouter);
  
 app.use((err,req,res,next)=>{
     console.error(err.message);

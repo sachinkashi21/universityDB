@@ -13,4 +13,9 @@ router.get("/", asyncFn(async (req, res) => {
     res.json({ students });
 }));
 
+router.get("/:classId",asyncFn(async(req,res)=>{
+    let students=await Student.getInClass(req.params.classId);
+    res.json({students});
+}))
+
 module.exports=router;
