@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
 
 const Login = ({ setIsLoggedIn }) => {
   const [data, setData] = useState({
     email: "", password: ""
   });
+  const navigate = useNavigate();
 
   let handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,11 +17,16 @@ const Login = ({ setIsLoggedIn }) => {
       toast.error(res.data.error);
     } else {
       toast.success("User logged in successfully " + res.data.user.email);
-      console.log(res);
+      // console.log(res);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user))
       setData({ email: "", password: "" });
       setIsLoggedIn(true);
+      if(res.data.user.role==="Teacher"){
+        navigate("/teacher/dashboard");
+      } else if(res.data.user.role==="Student"){
+        navigate(`/student/dashboard/${res.data.user.userId}`)
+      }
     }
   };
 

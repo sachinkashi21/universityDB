@@ -59,7 +59,7 @@ const AddCourse = () => {
 
         try {
             const res = await axios.post(`http://localhost:8080/class/${id}/addcourse`, {
-                data:{
+                data: {
                     courseCode: selectedCourse,
                     teacherId: selectedTeacher
                 },
@@ -82,14 +82,14 @@ const AddCourse = () => {
     return (
         <>
             <ToastContainer />
-            <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-2xl">
-                <h1 className="text-3xl font-bold text-indigo-900 text-center mb-6">Add Course to Class ID: {id}</h1>
-                <form className="space-y-6">
+            <div className="max-w-3xl mx-auto mt-10 p-8 bg-gray-100 shadow-md rounded-xl border border-gray-300">
+                <h1 className="text-4xl font-extrabold text-indigo-800 text-center mb-8">Add Course to Class ID: {id}</h1>
+                <form className="space-y-8">
                     <div>
-                        <label htmlFor="selectedCourse" className="block text-lg font-medium text-gray-700">Select Course</label>
+                        <label htmlFor="selectedCourse" className="block text-lg font-semibold text-gray-800 mb-2">Select Course</label>
                         <select
                             id="selectedCourse"
-                            className="mt-1 block w-full p-3 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                            className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                             onChange={handleCourseChange}
                             value={selectedCourse}
                         >
@@ -101,10 +101,10 @@ const AddCourse = () => {
                     </div>
 
                     <div>
-                        <label htmlFor="selectedTeacher" className="block text-lg font-medium text-gray-700">Allot Teacher</label>
+                        <label htmlFor="selectedTeacher" className="block text-lg font-semibold text-gray-800 mb-2">Allot Teacher</label>
                         <select
                             id="selectedTeacher"
-                            className="mt-1 block w-full p-3 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                            className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                             onChange={handleTeacherChange}
                             value={selectedTeacher}
                         >
@@ -118,7 +118,7 @@ const AddCourse = () => {
                     <button
                         type="button"
                         onClick={submitSelectedCourses}
-                        className="w-full px-6 py-3 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition duration-200"
+                        className="w-full px-6 py-3 bg-indigo-600 text-white font-bold text-lg rounded-lg hover:bg-indigo-700 transition duration-200"
                     >
                         Submit
                     </button>

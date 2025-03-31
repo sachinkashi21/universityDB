@@ -19,4 +19,9 @@ router.post('/new',asyncFn(async(req,res)=>{
     res.json({message:`Course Created Successfully`});
 }))
 
+router.get('/:classId',asyncFn(async(req,res)=>{
+    let result=await Course.getInClass(req.params.classId);
+    res.json(result);
+}))
+
 module.exports=router;

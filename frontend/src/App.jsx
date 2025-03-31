@@ -1,74 +1,100 @@
-import React, { useState } from 'react'
-import { BrowserRouter, Routes, Route } from "react-router";
-import './index.css'
+import React, { useState, Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import './index.css';
 
-import Navbar from "./components/Navbar";
+// Lazy load components
+const Layout = lazy(() => import('./layouts/Layout'));
+const Home = lazy(() => import('./pages/Home'));
+const Login = lazy(() => import('./pages/User/Login'));
+const Register = lazy(() => import('./pages/User/Register'));
 
-import Layout from './layouts/Layout';
+const ClassIndex = lazy(() => import('./pages/Class/Index'));
+const ClassNew = lazy(() => import('./pages/Class/New'));
+const ClassShow = lazy(() => import('./pages/Class/Show'));
+const AddCourse = lazy(() => import('./pages/Class/AddCourse'));
+const AddStudents = lazy(() => import('./pages/Class/AddStudents'));
 
-import Home from "./pages/Home";
-import Login from './pages/User/Login';
-import Register from "./pages/User/Register";
+const CourseIndex = lazy(() => import('./pages/Course/Index'));
+const CourseNew = lazy(() => import('./pages/Course/New'));
 
-import ClassIndex from "./pages/Class/Index";
-import ClassNew from "./pages/Class/New";
-import ClassShow from "./pages/Class/Show";
-import AddCourse from './pages/Class/AddCourse';
-import AddStudents from './pages/Class/AddStudents';
+const Classroom = lazy(() => import('./pages/Teacher/TeacherClass'));
+const TeacherDashboard = lazy(() => import('./pages/Teacher/Dashboard'));
 
-import CourseIndex from "./pages/Course/Index";
-import CourseNew from "./pages/Course/New";
+const NewLecture = lazy(() => import('./pages/Lecture/New'));
+const LectureAttendance = lazy(() => import('./pages/Lecture/Attedance'));
 
-import TeacherClass from './pages/Teacher/TeacherClass';
-import TeacherDashboard from './pages/Teacher/Dashboard';
+const AddMarks = lazy(() => import('./pages/Report/AddMarks'));
+const Generate = lazy(() => import('./pages/Report/Generate'));
 
-import NewLecture from './pages/Lecture/New'
-import LectureAttendance from './pages/Lecture/Attedance'
-import AddMarks from './pages/Report/AddMarks';
+const StudentDashboard = lazy(() => import('./pages/Student/Dashboard'));
+
+const NewAssignment= lazy(() => import('./pages/Assignment/New'));
+
+// Fallback component for lazy loading
+const Loading = () => <div className="text-center py-10">Loading...</div>;
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token") ? true : false);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+
   return (
     <>
-      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}></Navbar>
-      <Routes>
-        <Route path="/" element={<Home />}></Route>
+      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
 
-        <Route path="/user" element={<Layout />}>
-          <Route path='login' element={<Login setIsLoggedIn={setIsLoggedIn} />}></Route>
-          <Route path='register' element={<Register />} />
-        </Route>
+          {/* User Routes */}
+          <Route path="/user" element={<Layout />}>
+            <Route path="login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+            <Route path="register" element={<Register />} />
+          </Route>
 
-        <Route path="/class" element={<Layout />}>
-          <Route index element={<ClassIndex />}></Route>
-          <Route path='new' element={<ClassNew />}></Route>
-          <Route path=':id' element={<ClassShow />}></Route>
-          <Route path=':id/addcourse' element={<AddCourse />}></Route>
-          <Route path=':id/addStudents' element={<AddStudents />}></Route>
-        </Route>
+          {/* Class Routes */}
+          <Route path="/class" element={<Layout />}>
+            <Route index element={<ClassIndex />} />
+            <Route path="new" element={<ClassNew />} />
+            <Route path=":id" element={<ClassShow />} />
+            <Route path=":id/addcourse" element={<AddCourse />} />
+            <Route path=":id/addstudents" element={<AddStudents />} />
+          </Route>
 
-        <Route path="/course" element={<Layout />}>
-          <Route index element={<CourseIndex />}></Route>
-          <Route path='new' element={<CourseNew />}></Route>
-        </Route>
+          {/* Course Routes */}
+          <Route path="/course" element={<Layout />}>
+            <Route index element={<CourseIndex />} />
+            <Route path="new" element={<CourseNew />} />
+          </Route>
 
-        <Route path="/teacher" element={<Layout />}>
-          <Route path='dashboard' element={<TeacherDashboard/>}></Route>
-          <Route path=':classId/:courseId' element={<TeacherClass />}></Route>
-        </Route>
-        
-        <Route path="/lecture" element={<Layout />}>
-          <Route path=':lectId/:classId' element={<LectureAttendance />}></Route>
-          <Route path='new/:classId/:courseId' element={<NewLecture />}></Route>
-        </Route>
+          {/* Teacher Routes */}
+          <Route path="/teacher" element={<Layout />}>
+            <Route path="dashboard" element={<TeacherDashboard />} />
+          </Route>
+          <Route path="classroom/:classId/:courseId" element={<Classroom />} />
 
-        <Route path='/report' element={<Layout/>}>
-          <Route path=':classId/:courseId' element={<AddMarks/>}></Route>
-        </Route>
+          {/* Student Routes */}
+          <Route path="/student" element={<Layout />}>
+            <Route path="dashboard/:id" element={<StudentDashboard />} />
+          </Route>
 
-      </Routes>
+          <Route path="/assignment" element={<Layout />}>
+            <Route path="new/:classId/:courseId" element={<NewAssignment />} />
+          </Route>
+
+          {/* Lecture Routes */}
+          <Route path="/lecture" element={<Layout />}>
+            <Route path=":lectId/:classId" element={<LectureAttendance />} />
+            <Route path="new/:classId/:courseId" element={<NewLecture />} />
+          </Route>
+
+          {/* Report Routes */}
+          <Route path="/report" element={<Layout />}>
+            <Route path=":classId/:courseId" element={<AddMarks />} />
+            <Route path="generate/:studentId/:classId" element={<Generate />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

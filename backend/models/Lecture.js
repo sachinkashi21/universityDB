@@ -24,6 +24,14 @@ const Lecture = {
     );
 
     await Promise.all(promises);
+  },
+  addAssignment:async ({title, description, givenOn, deadline, classId, courseId})=>{
+    const q = `
+      INSERT INTO ASSIGNMENT (Title, Description, GivenOn, Deadline, ClassId, CourseId )
+      VALUES (?, ?, ?, ?, ?, ?);
+    `;
+
+    await pool.query(q,[title,description,givenOn,deadline,classId,courseId]);
   }
 };
 

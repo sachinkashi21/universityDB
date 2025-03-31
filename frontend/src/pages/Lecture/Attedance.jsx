@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import {toast, ToastContainer} from "react-toastify";
 
 const Attedance = () => {
   const { lectId, classId } = useParams(); // Get lecture and class ID from URL params
@@ -49,7 +50,8 @@ const Attedance = () => {
         `http://localhost:8080/lecture/attendance/${classId}/${lectId}`,
         attendanceData // Sending attendance data in the request body
       );
-      console.log("Response from backend:", response.data);
+      toast.success(response.data.message)
+      // console.log("Response from backend:", response.data);
     } catch (error) {
       console.error("Error submitting attendance:", error);
     }
@@ -58,6 +60,7 @@ const Attedance = () => {
 
   return (
     <div className="p-4">
+      <ToastContainer/>
       <h1 className="text-2xl font-bold mb-4">Record Attendance</h1>
       <div className="overflow-auto border rounded-lg shadow-md p-4">
         <table className="table-auto w-full text-left">

@@ -18,7 +18,8 @@ router.post("/:id/addcourse", asyncFn(async (req, res) => {
 }));
 
 router.post("/:id/addStudents", asyncFn(async (req, res) => {
-    await Class.addStudents(req.params.id, req.body.data.students);
+    // console.log(req.body.students);
+    await Class.addStudents(req.params.id, req.body.students);
     res.json({message: "Courses added successfully"});
 }));
 

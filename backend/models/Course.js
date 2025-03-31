@@ -15,6 +15,11 @@ const Course={
         const q=`insert into course values (?,?,?,?)`
         const [rows]=await pool.query(q,[CourseCode,Name,Credits,DeptName]);
         return rows;
+    },
+    getInClass:async(classId)=>{
+        const q=`select * from curriculum cu, course c where cu.CourseId=c.CourseCode and cu.ClassId= ?`
+        const [rows]=await pool.query(q,[classId]);
+        return rows;
     }
 }
 

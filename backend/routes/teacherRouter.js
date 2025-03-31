@@ -1,4 +1,5 @@
 const router=require("express").Router();
+const { pool } = require("../config/db");
 const asyncFn=require("../middleware/asyncWrapper");
 const Teacher=require("../models/Teacher");
 
@@ -23,6 +24,7 @@ router.get(
         const assignments = await Teacher.getAssignments(classId, courseId);
         const students = await Teacher.getStudents(classId);
         const attendance = await Teacher.getAttendance(classId, courseId);
+        const teacherId=await Teacher.getId(classId,courseId);
   
         // Send the data as a JSON response
         res.json({
@@ -30,6 +32,7 @@ router.get(
           assignments,
           students,
           attendance,
+          teacherId
         });
       } catch (err) {
         console.error(err);

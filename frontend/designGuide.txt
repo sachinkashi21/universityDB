@@ -1,0 +1,74 @@
+Color Palette
+Primary Colors (for Brand Identity)
+1. Deep Navy Blue (#1B3A57): Represents professionalism, trust, and authority. Use for headers, navigation bars, and main buttons.
+2. Crimson Red (#D72638): A striking accent color for important actions, such as “Submit,” “Add,” or other call-to-actions (CTAs).
+3. Gold (#F5C32C): For hover states or minor highlights, representing excellence and academia.
+
+Neutral Colors (for Backgrounds and Text)
+1. White (#FFFFFF): For the primary background to maintain simplicity and readability.
+2. Light Gray (#F7F9FB): For section backgrounds or cards to separate components visually.
+3. Charcoal Gray (#333E48): For main text to ensure readability and contrast.
+
+Typography
+1. Headings: Bold weights (600-700).
+2. Body Text: Regular weights (400-500).
+3. Font sizes: Scalable for different devices (use text-sm, text-base, text-xl, text-2xl in Tailwind).
+
+Spacing & Layout
+Padding & Margin: Use a base spacing scale (multiples of 4px). In Tailwind:
+1. Padding: p-4, p-6, or p-8 for larger sections.
+2. Margins: m-2, m-4, and m-6 for proper separation of elements.
+
+Grid System:
+1. Use 12-column grids for cards, reports, or main content areas.
+2. Tailwind utilities like grid-cols-12 and gap-x-4 for better spacing between grid items.
+
+Card Design:
+1.Rounded corners (rounded-2xl), box shadows (shadow-md), and subtle hover effects (hover:shadow-lg).
+
+Component Design Scheme
+2. Background: Deep Navy Blue (bg-[#1B3A57])
+3. Text: White (text-white)
+Add a thin bottom border with Gold for subtle separation.
+
+Buttons:
+1. Primary Button: Crimson Red background (bg-[#D72638]), white text (text-white), rounded edges (rounded-lg), hover state with a slightly darker shade (hover:bg-[#C02031]).
+2. Secondary Button: Transparent or Light Gray background (bg-gray-100), Navy Blue text (text-[#1B3A57]), hover with Gold border.
+
+Tables:
+1. Alternate row colors using Light Gray (bg-[#F7F9FB]) and White for better readability.
+2. Borders: Thin lines in Charcoal Gray (border-[#333E48]).
+
+Toast/alerts:
+1. use `import { ToastContainer, toast } from 'react-toastify';`
+
+Input Fields:
+1. White background (bg-white), Charcoal Gray border (border-[#333E48]), rounded corners (rounded-md), and padding (px-4 py-2).
+2. Focus State: Border color changes to Navy Blue or Gold (focus:border-[#1B3A57] or focus:border-[#F5C32C]).
+
+Key Tailwind Utilities
+1. Backgrounds: bg-[#1B3A57], bg-[#D72638], bg-[#F7F9FB].
+2. Text: text-[#1B3A57], text-[#333E48], text-[#F5C32C].
+3. Borders: border-[#333E48], focus:border-[#1B3A57].
+4. Shadows: shadow-md, shadow-lg, hover:shadow-xl.
+5. Spacing: p-4, m-4, gap-4.
+6. Rounded Corners: rounded-md, rounded-lg, rounded-2xl.
+7. Transitions: transition duration-300 ease-in-out for hover effects.
+
+the Layout already has a default layout styling of
+    <div className="bg-[#F7F9FB]">
+
+      <main className="flex-1 bg-[#F7F9FB] min-h-screen">
+        <div className="bg-white shadow-md">
+          <Outlet />
+        </div>
+      </main>
+
+      {/* Footer Section */}
+      <footer className="bg-[#1B3A57] text-white py-4 mt-8">
+        <div className="max-w-screen-xl mx-auto text-center text-sm">
+          &copy; {new Date().getFullYear()} University Database. All rights reserved.
+        </div>
+      </footer>
+    </div>
+So avoid clashing style for components    

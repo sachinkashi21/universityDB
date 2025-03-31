@@ -8,6 +8,7 @@ let cors=require("cors");
 let corsOptions={origin:"*",optionsSuccessStatus:204,allowesHeaders:"*",methods:"GET,POST,PUT,DELETE"};
 app.use(cors(corsOptions));
 
+const asyncFn=require("./middleware/asyncWrapper");
 
 let userRouter=require("./routes/userRouter");
 let classRouter=require("./routes/classRouter");
@@ -16,10 +17,16 @@ let teacherRouter=require("./routes/teacherRouter");
 let studentRouter=require("./routes/studentRouter");
 let lectureRouter=require("./routes/lectureRouter");
 let reportRouter=require("./routes/reportRouter");
+const Lecture = require("./models/Lecture");
 
 app.get("/",(req,res)=>{
     res.send("Get: home route");
 })
+app.post("/assignment/new",asyncFn(async (req,res) => {
+    // console.log(req.body.data);
+    await Lecture.addAssignment(req.body.data);
+    res.json("Success");
+}));
 app.use("/user",userRouter);
 app.use("/class",classRouter);
 app.use("/course",courseRouter);

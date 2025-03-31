@@ -13,6 +13,11 @@ router.get("/", asyncFn(async (req, res) => {
     res.json({ students });
 }));
 
+router.get("/dashboard/:id",asyncFn(async (req,res)=>{
+    let student=await Student.get(req.params.id);
+    res.json({student});
+}))
+
 router.get("/:classId",asyncFn(async(req,res)=>{
     let students=await Student.getInClass(req.params.classId);
     res.json({students});

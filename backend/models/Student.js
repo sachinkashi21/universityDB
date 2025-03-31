@@ -1,6 +1,11 @@
 const pool=require("../config/db");
 
 const Student={
+    get: async(id)=>{
+        let q=`select * from Users u, Student s where u.UserId=s.UserId and u.userId= ?`
+        let [student]=await pool.query(q,[id]);
+        return student;
+    },
     getAll:async ()=>{
         let q=`SELECT CurrentClassId, FName, MInit, LName, u.UserId FROM Users u, Student s WHERE u.UserId=s.UserId`;
         let [students]=await pool.query(q);

@@ -4,10 +4,9 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
 const New = () => {
-  const { classId, courseId } = useParams(); // Get classId and courseId from URL
+  const { classId, courseId } = useParams();
   const navigate = useNavigate();
 
-  // State for form inputs
   const [formData, setFormData] = useState({
     topic: "",
     date: "",
@@ -17,114 +16,119 @@ const New = () => {
     meetLink: "",
   });
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // API request to create a lecture
       const response = await axios.post(
         `http://localhost:8080/lecture/${classId}/${courseId}`,
         formData
       );
 
-      // Success response
-      if(response.data.error){
+      if (response.data.error) {
         toast.error(response.data.error);
-      } else{
-        toast.success(response.data);
-        navigate(`/teacher/${classId}/${courseId}`);
+      } else {
+        toast.success("Lecture created successfully!");
+        navigate(`/classroom/${classId}/${courseId}`);
       }
     } catch (error) {
-      console.log(error);
+      toast.error("Failed to create lecture");
     }
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto bg-white shadow rounded">
-        <ToastContainer/>
-      <h2 className="text-xl font-bold mb-4">Create a Lecture</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-2">
-          <label className="block font-semibold">Topic:</label>
-          <input
-            type="text"
-            name="topic"
-            value={formData.topic}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Enter lecture topic"
-            required
-          />
-        </div>
-        <div className="mb-2">
-          <label className="block font-semibold">Date:</label>
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
-        </div>
-        <div className="mb-2">
-          <label className="block font-semibold">Time:</label>
-          <input
-            type="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
-        </div>
-        <div className="mb-2">
-          <label className="block font-semibold">Duration (in minutes):</label>
-          <input
-            type="number"
-            name="duration"
-            value={formData.duration}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Enter duration"
-            required
-          />
-        </div>
-        <div className="mb-2">
-          <label className="block font-semibold">Room Number:</label>
-          <input
-            type="text"
-            name="roomNo"
-            value={formData.roomNo}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Enter room number"
-          />
-        </div>
-        <div className="mb-2">
-          <label className="block font-semibold">Meeting Link:</label>
-          <input
-            type="url"
-            name="meetLink"
-            value={formData.meetLink}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Enter meeting link (if any)"
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white p-2 rounded w-full"
-        >
-          Create Lecture
-        </button>
-      </form>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <ToastContainer />
+      <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-lg">
+        <h2 className="text-2xl font-bold text-center mb-6 text-indigo-600">Create a Lecture</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block font-semibold mb-1">Topic:</label>
+            <input
+              type="text"
+              name="topic"
+              value={formData.topic}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Enter lecture topic"
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block font-semibold mb-1">Date:</label>
+              <input
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+            </div>
+            <div>
+              <label className="block font-semibold mb-1">Time:</label>
+              <input
+                type="time"
+                name="time"
+                value={formData.time}
+                onChange={handleChange}
+                className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block font-semibold mb-1">Duration (in minutes):</label>
+            <input
+              type="number"
+              name="duration"
+              value={formData.duration}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Enter duration"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block font-semibold mb-1">Room Number:</label>
+            <input
+              type="text"
+              name="roomNo"
+              value={formData.roomNo}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Enter room number"
+            />
+          </div>
+
+          <div>
+            <label className="block font-semibold mb-1">Meeting Link:</label>
+            <input
+              type="url"
+              name="meetLink"
+              value={formData.meetLink}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Enter meeting link (if any)"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition duration-300"
+          >
+            Create Lecture
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

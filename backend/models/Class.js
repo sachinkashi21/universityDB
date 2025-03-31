@@ -11,7 +11,7 @@ const Class = {
         const [rows] = await pool.query(query, [classId]); 
         const query2=`SELECT * FROM STUDENT s, USERS u WHERE s.UserId=u.userId and CurrentClassId=?`;
         const [rows2]=await pool.query(query2,[classId]);
-        const query3=`SELECT co.CourseCode, co.Name, t.UserId, t.FName, t.LName, t.MInit 
+        const query3=`SELECT * 
         FROM CURRICULUM c, COURSE co, USERS t 
         WHERE c.CourseId=co.CourseCode and c.AssignedTeacherId=t.UserId and ClassId=?`;
         const [rows3]=await pool.query(query3,[classId]);

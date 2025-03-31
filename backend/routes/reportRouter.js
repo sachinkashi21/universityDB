@@ -43,4 +43,9 @@ router.post('/:classId/:courseId', asyncFn(async (req, res) => {
     res.status(200).json({ success: true, message: 'Reports added successfully!' });
 }));
 
+router.get("/:classId/:studentId",asyncFn(async(req,res)=>{
+    let result=await Report.getAllMarks(req.params.classId,req.params.studentId);
+    res.json(result);
+}))
+
 module.exports = router;

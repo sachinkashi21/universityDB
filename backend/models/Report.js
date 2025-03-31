@@ -24,6 +24,11 @@ const Report = {
 
         await pool.query(query, [values]);
     },
+    getAllMarks:async (classId,studentId)=>{
+        const q=`select * from report r where r.ClassId= ? and r.StudentId= ?`;
+        const [row]=await pool.query(q,[classId,studentId]);
+        return row;
+    }
 };
 
 module.exports = Report;

@@ -1,6 +1,12 @@
 const pool = require("../config/db");
 
 const Teacher = {
+  getId: async (classId,courseId)=>{
+    const q=`select AssignedTeacherId from Curriculum where ClassId= ? and CourseId= ?`
+    const [teacherId]= await pool.query(q,[classId,courseId]);
+    // console.log(teacherId);
+    return teacherId[0].AssignedTeacherId;
+  },
   // Get all teachers
   getAll: async () => {
     const q = `SELECT t.*, u.FName, u.LName, u.Email 
@@ -58,7 +64,7 @@ const Teacher = {
     const q = `SELECT a.AssignmentId, a.Title, a.Description, a.GivenOn, a.Deadline
                FROM ASSIGNMENT a
                WHERE a.ClassId = ? AND a.CourseId = ?
-               ORDER BY a.Deadline ASC`;
+               ORDER BY a.GivenOn DESC`;
     const [rows] = await pool.query(q, [classId, courseId]);
     return rows;
   },
