@@ -1,31 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {toast, ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
-const Attedance = () => {
-  const { lectId, classId } = useParams(); // Get lecture and class ID from URL params
+const Attendance = () => {
+  const { lectId, classId } = useParams();
   const [students, setStudents] = useState([]);
   const [attendance, setAttendance] = useState({});
 
   useEffect(() => {
-    // Fetch students for the given classId
     const fetchStudents = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/student/${classId}`); // Replace with your backend route
+        const response = await axios.get(`http://localhost:8080/student/${classId}`);
         setStudents(response.data.students);
-
-        // Initialize attendance state
         const initialAttendance = {};
         response.data.students.forEach((student) => {
-          initialAttendance[student.UserId] = "Absent"; // Default to 'Present'
+          initialAttendance[student.UserId] = "Absent";
         });
         setAttendance(initialAttendance);
       } catch (error) {
         console.error("Error fetching students:", error);
       }
     };
-
     fetchStudents();
   }, [classId]);
 
@@ -42,78 +38,58 @@ const Attedance = () => {
       classId,
       attendance,
     };
-  
-    console.log("Attendance Data:", attendanceData);
-  
     try {
       const response = await axios.post(
         `http://localhost:8080/lecture/attendance/${classId}/${lectId}`,
-        attendanceData // Sending attendance data in the request body
+        attendanceData
       );
-      toast.success(response.data.message)
-      // console.log("Response from backend:", response.data);
+      toast.success(response.data.message);
     } catch (error) {
       console.error("Error submitting attendance:", error);
     }
   };
-  
 
   return (
-    <div className="p-4">
-      <ToastContainer/>
-      <h1 className="text-2xl font-bold mb-4">Record Attendance</h1>
-      <div className="overflow-auto border rounded-lg shadow-md p-4">
-        <table className="table-auto w-full text-left">
-          <thead>
-            <tr className="bg-blue-500 text-white">
-              <th className="px-4 py-2">Student ID</th>
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Attendance</th>
+    <div className="p-6 max-w-7xl mx-auto">
+      <ToastContainer />
+      <h1 className="text-3xl font-bold text-[#1B3A57] mb-6 border-b-2 border-[#F5C32C] pb-2">
+        Mark Attendance
+      </h1>
+
+      <div className="overflow-x-auto shadow-md rounded-2xl">
+        <table className="min-w-full text-sm bg-white rounded-2xl border border-[#F5C32C]">
+          <thead className="bg-[#F7F9FB] text-[#1B3A57] text-base">
+            <tr>
+              <th className="py-3 px-6 border-b border-[#F5C32C] text-left">Student ID</th>
+              <th className="py-3 px-6 border-b border-[#F5C32C] text-left">Name</th>
+              <th className="py-3 px-6 border-b border-[#F5C32C] text-left">Attendance</th>
             </tr>
           </thead>
           <tbody>
-            {students.map((student) => (
-              <tr key={student.UserId} className="border-b">
-                <td className="px-4 py-2">{student.UserId}</td>
-                <td className="px-4 py-2">{`${student.FName} ${student.LName}`}</td>
-                <td className="px-4 py-2">
-                  <div className="flex gap-2">
-                    <label className="flex items-center gap-1">
-                      <input
-                        type="radio"
-                        name={`attendance-${student.UserId}`}
-                        value="Present"
-                        checked={attendance[student.UserId] === "Present"}
-                        onChange={(e) =>
-                          handleAttendanceChange(student.UserId, e.target.value)
-                        }
-                      />
-                      Present
-                    </label>
-                    <label className="flex items-center gap-1">
-                      <input
-                        type="radio"
-                        name={`attendance-${student.UserId}`}
-                        value="Absent"
-                        checked={attendance[student.UserId] === "Absent"}
-                        onChange={(e) =>
-                          handleAttendanceChange(student.UserId, e.target.value)
-                        }
-                      />
-                      Absent
-                    </label>
-                    <label className="flex items-center gap-1">
-                      <input
-                        type="radio"
-                        name={`attendance-${student.UserId}`}
-                        value="Partial"
-                        checked={attendance[student.UserId] === "Partial"}
-                        onChange={(e) =>
-                          handleAttendanceChange(student.UserId, e.target.value)
-                        }
-                      />
-                      Partial
-                    </label>
+            {students.map((student, index) => (
+              <tr
+                key={student.UserId}
+                className={index % 2 === 0 ? "bg-white" : "bg-[#F7F9FB]"}
+              >
+                <td className="py-3 px-6">{student.UserId}</td>
+                <td className="py-3 px-6">{`${student.FName} ${student.LName}`}</td>
+                <td className="py-3 px-6">
+                  <div className="flex gap-4">
+                    {["Present", "Absent", "Partial"].map((status) => (
+                      <label key={status} className="flex items-center gap-2 text-[#333E48]">
+                        <input
+                          type="radio"
+                          name={`attendance-${student.UserId}`}
+                          value={status}
+                          checked={attendance[student.UserId] === status}
+                          onChange={(e) =>
+                            handleAttendanceChange(student.UserId, e.target.value)
+                          }
+                          className="accent-[#D72638] cursor-pointer"
+                        />
+                        <span className="capitalize">{status}</span>
+                      </label>
+                    ))}
                   </div>
                 </td>
               </tr>
@@ -121,8 +97,9 @@ const Attedance = () => {
           </tbody>
         </table>
       </div>
+
       <button
-        className="mt-4 bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600"
+        className="mt-6 bg-[#D72638] hover:bg-[#C02031] text-white px-6 py-3 rounded-lg shadow transition duration-300 text-base"
         onClick={handleSubmit}
       >
         Submit Attendance
@@ -131,4 +108,4 @@ const Attedance = () => {
   );
 };
 
-export default Attedance;
+export default Attendance;

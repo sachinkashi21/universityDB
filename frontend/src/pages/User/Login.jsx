@@ -51,9 +51,9 @@ const Login = ({ setIsLoggedIn }) => {
             <label className="block text-indigo-900 font-semibold" htmlFor='password'>Password</label>
             <input type="password" id="password" name="password" placeholder="Password" className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" onChange={handleChange} value={data.password} />
           </div>
-          <div className='mb-2'>
+          {/* <div className='mb-2'>
             <a href="/user/changePass" className="mb-5 text-indigo-700 hover:underline">Change Password</a>
-          </div>
+          </div> */}
           <button type="submit" className="block bg-orange-600 hover:bg-orange-700 text-white p-3 w-full rounded-lg text-xl font-semibold transition-all duration-300">Login</button>
         </form>
       </div>

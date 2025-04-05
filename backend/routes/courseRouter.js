@@ -23,5 +23,9 @@ router.get('/:classId',asyncFn(async(req,res)=>{
     let result=await Course.getInClass(req.params.classId);
     res.json(result);
 }))
+router.get('/single/:courseId',asyncFn(async(req,res)=>{
+    let result=await Course.getById(req.params.courseId);
+    res.json(result);
+}))
 
 module.exports=router;

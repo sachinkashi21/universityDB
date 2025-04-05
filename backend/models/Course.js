@@ -6,6 +6,11 @@ const Course={
         const [rows]=await pool.query(query);
         return rows;
     },
+    getById:async(courseId)=>{
+        const query=`SELECT * FROM COURSE where CourseCode=?`;
+        const [rows]=await pool.query(query,[courseId]);
+        return rows[0];
+    },
     getAllExcludingInClass:async(cls)=>{
         const query=`SELECT * FROM COURSE WHERE CourseCode NOT IN (SELECT CourseId FROM CURRICULUM WHERE ClassId=?)`;
         const [rows]=await pool.query(query,[cls]);

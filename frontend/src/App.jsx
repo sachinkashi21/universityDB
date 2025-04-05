@@ -8,6 +8,7 @@ const Layout = lazy(() => import('./layouts/Layout'));
 const Home = lazy(() => import('./pages/Home'));
 const Login = lazy(() => import('./pages/User/Login'));
 const Register = lazy(() => import('./pages/User/Register'));
+const ChangePassword = lazy(() => import('./pages/User/ChangePassword'));
 
 const ClassIndex = lazy(() => import('./pages/Class/Index'));
 const ClassNew = lazy(() => import('./pages/Class/New'));
@@ -48,6 +49,7 @@ function App() {
           <Route path="/user" element={<Layout />}>
             <Route path="login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
             <Route path="register" element={<Register />} />
+            <Route path="changePass" element={<ChangePassword />} />
           </Route>
 
           {/* Class Routes */}
